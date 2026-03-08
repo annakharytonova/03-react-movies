@@ -6,7 +6,7 @@ interface MoviesParam {
   results: Movie[];
 }
 
-async function fetchMovies(query: string) {
+async function fetchMovies(query: string): Promise<Movie[]> {
   const url = "https://api.themoviedb.org/3/search/movie";
   const options = {
     method: "GET",
@@ -19,7 +19,6 @@ async function fetchMovies(query: string) {
     },
   };
   const response = await axios.get<MoviesParam>(url, options);
-  console.log(response.data.results);
   return response.data.results;
 }
 
