@@ -9,9 +9,11 @@ import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
 
 import type { Movie } from "../types/movie";
+import MovieModal from "../MovieModal/MovieModal";
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
+  const [selectMovie, setSelectMovie] = useState<Movie | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
 
@@ -33,16 +35,27 @@ function App() {
       setIsLoading(false);
     }
   };
+
+  const handleSelect = (movie: Movie) => {
+    setSelectMovie(movie);
+  };
+  const handleCloseModal = () => {
+    setSelectMovie(null);
+  };
+
   return (
     <>
       <SearchBar onSubmit={handleSearch} />
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
       {!isLoading && !isError && (
-        <MovieGrid onSelect={() => {}} movies={movies} />
+        <MovieGrid onSelect={handleSelect} movies={movies} />
       )}
 
       <Toaster />
+      {selectMovie && (
+        <MovieModal movie={selectMovie} onClose={handleCloseModal} />
+      )}
     </>
   );
 }
